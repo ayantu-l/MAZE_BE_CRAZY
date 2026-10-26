@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Maze Be Crazy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+</head>
+<body data-page="login">
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="" width="44" height="44">
+      <span>MAZE BE CRAZY</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="index.html" data-page="index">Home</a></li>
+        <li><a href="game.html" data-page="game">Play</a></li>
+        <li><a href="rankings.html" data-page="rankings">Rankings</a></li>
+        <li id="nav-login"><a href="login.html" data-page="login">Login</a></li>
+        <li id="nav-register"><a href="register.html" data-page="register">Register</a></li>
+        <li id="nav-user" hidden>
+          <span id="nav-avatar" class="avatar" role="img" aria-label="Your profile"></span>
+          <button type="button" id="logout-btn" class="link-button">Log out</button>
+        </li>
+        <li><button type="button" id="sound-toggle" class="sound-btn" aria-label="Turn sound on or off">♪</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel narrow">
+      <h1>LOGIN</h1>
+      <div id="form-message" class="message" role="status"></div>
+
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="text" id="email" name="email" autocomplete="email">
+          <span class="error" id="email-error" role="alert"></span>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password">
+          <span class="error" id="password-error" role="alert"></span>
+        </div>
+
+        <button type="submit" class="button">LOGIN</button>
+      </form>
+
+      <p>Don't have an account? <a href="register.html">Register</a></p>
+    </section>
+  </main>
+<!-- Footer -->
+  <footer class="site-footer">@2026 Maze Be Crazy. All rights reserved.</footer>
+ 
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

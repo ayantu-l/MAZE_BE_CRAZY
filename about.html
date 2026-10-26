@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About | Maze Be Crazy</title>
+  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="about">
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="" width="44" height="44">
+      <span>MAZE BE CRAZY</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="index.html" data-page="index">Home</a></li>
+        <li><a href="game.html" data-page="game">Play</a></li>
+        <li><a href="rankings.html" data-page="rankings">Rankings</a></li>
+        <li><a href="about.html" data-page="about" aria-current="page">About</a></li>
+        <li id="nav-login"><a href="login.html" data-page="login">Login</a></li>
+        <li id="nav-register"><a href="register.html" data-page="register">Register</a></li>
+        <li id="nav-user" hidden>
+          <span id="nav-avatar" class="avatar" role="img" aria-label="Your profile"></span>
+          <button type="button" id="logout-btn" class="link-button">Log out</button>
+        </li>
+        <li><button type="button" id="sound-toggle" class="sound-btn" aria-label="Turn sound on or off">♪</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel about-panel">
+
+      <!-- Survivor's log -->
+      <div class="terminal-header">
+        <h1 class="glitch-title">SURVIVOR'S LOG</h1>
+        <p class="terminal-status">STATUS: TRAPPED</p>
+      </div>
+
+      <!-- Game story -->
+      <div class="story-box">
+        <p class="warning-text">⚠️ WARNING: THE MAZE IS ALIVE ⚠️;</p>
+        <p>
+          You are trapped in an ancient, shifting labyrinth. The only way out is through.
+          But you are not alone. Mutated creatures stalk the corridors in the dark,
+          and they learn from every mistake you make. Grab your gun, keep your wits
+          about you, and <strong>DON'T STOP RUNNING.</strong>
+        </p>
+        <p class="inspiration-text">Game concept inspired by The Maze Runner series </p>
+      </div>
+
+      <!-- Survivor quote -->
+      <div class="survivor-quote">
+        <p class="quote-label">SURVIVOR'S MESSAGE</p>
+        <blockquote>"Getting lost is easy. Staying alive is the real challenge."</blockquote>
+        <p class="quote-author">MAZE BE CRAZY</p>
+      </div>
+
+      <!-- Game controls -->
+      <h2 class="section-title"> SYSTEM CONTROLS</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <span class="key-icon">W A S D / ARROWS</span>
+          <p>Navigate the maze</p>
+        </div>
+        <div class="info-card">
+          <span class="key-icon">SPACEBAR</span>
+          <p>Fire in the direction you face</p>
+        </div>
+        <div class="info-card">
+          <span class="key-icon">E</span>
+          <p>Echo: reveal the maze</p>
+        </div>
+      </div>
+
+      <!-- Survival protocols -->
+      <h2 class="section-title"> SURVIVAL PROTOCOLS</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>🔥 OVERHEAT</h3>
+          <p>Your ammo is unlimited, but fire too fast and the weapon jams for 5 seconds. Let it cool down or become monster food.</p>
+        </div>
+        <div class="info-card">
+          <h3>🧬 MUTATION</h3>
+          <p>Killed monsters drop orbs. Collect them to upgrade your gun. If a monster nearby absorbs one, it evolves and gets stronger.</p>
+        </div>
+        <div class="info-card">
+          <h3> 📡 ECHO</h3>
+          <p>The maze is dark. Press <strong>E</strong> to reveal it for a few seconds. Warning: every monster learns your exact position.</p>
+        </div>
+      </div>
+
+      <!-- Game navigation buttons -->
+      <div class="button-group about-buttons">
+        <a href="game.html" class="button">ENTER THE MAZE</a>
+        <a href="index.html" class="button secondary">RUN AWAY</a>
+      </div>
+
+    </section>
+  </main>
+<!-- Footer -->
+  <footer class="site-footer">@2026 Maze Be Crazy. All rights reserved.</footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

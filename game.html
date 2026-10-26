@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play | Maze Be Crazy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+</head>
+<body data-page="game">
+  <!-- Navigation bar -->
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="" width="44" height="44">
+      <span>MAZE BE CRAZY</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="index.html" data-page="index">Home</a></li>
+        <li><a href="game.html" data-page="game">Play</a></li>
+        <li><a href="rankings.html" data-page="rankings">Rankings</a></li>
+        <li><a href="about.html" data-page="about">About</a></li>
+        <li id="nav-login"><a href="login.html" data-page="login">Login</a></li>
+        <li id="nav-register"><a href="register.html" data-page="register">Register</a></li>
+        <li id="nav-user" hidden>
+          <span id="nav-avatar" class="avatar" role="img" aria-label="Your profile"></span>
+          <button type="button" id="logout-btn" class="link-button">Log out</button>
+        </li>
+        <li><button type="button" id="sound-toggle" class="sound-btn" aria-label="Turn sound on or off">♪</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="game-main">
+    <!-- Level selection screen -->
+    <section id="level-selection">
+      <h1>CHOOSE YOUR LEVEL</h1>
+      <p id="game-message" role="status">Loading game files...</p>
+
+      <div class="level-options">
+        <button type="button" class="level-btn" data-level="1">
+          LEVEL 1
+          <span>Stone Dungeon</span>
+        </button>
+
+        <button type="button" class="level-btn" data-level="2">
+          LEVEL 2
+          <span>Mossy Ruins</span>
+
+        </button>
+
+        <button type="button" class="level-btn" data-level="3">
+          LEVEL 3
+          <span>Lava Caves</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- Game canvas -->
+    <section id="game-container" hidden>
+      <canvas id="game-canvas" width="1280" height="720">
+        Your browser does not support the canvas element.
+      </canvas>
+    </section>
+  </main>
+<!-- Footer -->
+  <footer class="site-footer"> @2026 Maze Be Crazy. All rights reserved.</footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>

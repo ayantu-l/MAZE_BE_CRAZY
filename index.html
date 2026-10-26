@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home | Maze Be Crazy</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="images/logo.png" type="image/png">
+
+</head>
+
+<body data-page="index">
+    <!-- Intro splash, shown once per visit -->
+  <div id="intro" class="intro" aria-hidden="true" hidden>
+    <img class="intro-logo" src="images/logo.png" alt="">
+    <p class="intro-title">MAZE BE CRAZY</p>
+    <p class="intro-tagline">DON'T STOP RUNNING</p>
+  </div>
+  <!-- Navigation bar -->
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="" width="44" height="44">
+      <span>MAZE BE CRAZY</span>
+      
+    </a>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="index.html" data-page="index">Home</a></li>
+        <li><a href="game.html" data-page="game">Game</a></li>
+        <li><a href="rankings.html" data-page="rankings">Rankings</a></li>
+        <li><a href="about.html" data-page="about">About</a></li>
+        <li id="nav-login"><a href="login.html" data-page="login">Login</a></li>
+        <li id="nav-register"><a href="register.html" data-page="register">Register</a></li>
+        <li id="nav-user" hidden>
+          <span id="nav-avatar" class="avatar" role="img" aria-label="Your profile"></span>
+          <button type="button" id="logout-btn" class="link-button">Log out</button>
+        </li>
+        <li><button type="button" id="sound-toggle" class="sound-btn" aria-label="Turn sound on or off">♪</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h1>MAZE BE CRAZY</h1>
+      <p class="subtitle">Welcome to the maze. Bring snacks you might be one. <br> Have fun. Do not die.</p>
+      <div class="button-group">
+        <a href="game.html" class="button">Play Game</a>
+        <a href="register.html" class="button secondary">Join Now</a>
+      </div>
+    </section>
+  </main>
+<!-- Footer -->
+  <footer class="site-footer">@2026 Maze Be Crazy. All rights reserved.</footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
