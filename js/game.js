@@ -1,53 +1,41 @@
-// Game page: loads the game files, connects the level buttons to the game and shows or hides the menu.
+// Game page loads the game files, then lets the player start a level with the level buttons.
 import { Assets } from "./game/assets.js";
 import { GameScene } from "./game/gamescene.js";
 
 const canvas = document.getElementById("game-canvas");
 const menu = document.getElementById("level-selection");
 const container = document.getElementById("game-container");
-const message = document.getElementById("game-message");
 const buttons = document.querySelectorAll(".level-btn");
 
-const assets = new Assets();
-let game = null;
-
-// Shows the level menu again (the game calls this when it ends)
+// Shows the level menu and hides the game
 function showMenu() {
   menu.hidden = false;
   container.hidden = true;
 }
 
-// Load everything first; the level buttons only work when this has finished.
-message.textContent = "Loading game files...";
-assets.load()
-  .then(() => {
-    game = new GameScene(canvas, assets);
-    game.onExit = showMenu;
-    message.textContent = "Choose a maze to begin.";
-  })
-  .catch((error) => {
-    message.textContent = `The game could not start: ${error.message}`;
-  });
+// The level buttons start disabled and are enabled when everything is loaded
+const assets = new Assets();
+assets.load().then(() => {
+  const game = new GameScene(canvas, assets);
+  game.onExit = showMenu;
 
-// F switches between the small game window and the full screen (only while a level is shown)
-document.addEventListener("keydown", (event) => {
-  if (event.key.toLowerCase() !== "f" || container.hidden) {
-    return;
-  }
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  } else {
-    container.requestFullscreen();
-  }
-});
-
-// Every level button starts its level with a fresh score
-buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    if (game !== null) {
+  buttons.forEach((button) => {
+    button.disabled = false;
+    button.addEventListener("click", () => {
+      game.startLevel(Number(button.dataset.level));
       menu.hidden = true;
       container.hidden = false;
-      game.startLevel(Number(button.dataset.level));
-    }
+    });
   });
+});
+
+// Pressing F switches between the small game window and the full screen
+document.addEventListener("keydown", (event) => {
+  if (event.key.toLowerCase() === "f" && !container.hidden) {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      container.requestFullscreen();
+    }
+  }
 });

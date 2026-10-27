@@ -2,6 +2,7 @@
 const USERS_KEY = "mbc_users";
 const SCORES_KEY = "mbc_scores";
 const SESSION_KEY = "mbc_session";
+const MUTED_KEY = "mbc_muted";
 
 
 // Read a JSON value from local storage, or return the fallback if it is missing or damaged
@@ -55,4 +56,14 @@ function setSession(email) {
 // Log the user out
 function clearSession() {
   localStorage.removeItem(SESSION_KEY);
+}
+
+// Whether the player switched the game sound off with the round button in the navigation bar
+function isMuted() {
+  return readJSON(MUTED_KEY, false);
+}
+
+// Remember whether the sound is switched off
+function setMuted(muted) {
+  writeJSON(MUTED_KEY, muted);
 }

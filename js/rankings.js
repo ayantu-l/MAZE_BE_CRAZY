@@ -1,47 +1,20 @@
+// Rankings pag lists every player's top score, loaded from local storage, highest first.
 
-function updateNav() {
-  const email = getSession();
-  const navLogin = document.getElementById("nav-login");
-  const navRegister = document.getElementById("nav-register");
-  const navUser = document.getElementById("nav-user");
-  const avatar = document.getElementById("nav-avatar");
+const tableBody = document.getElementById("rankings-body");
+const message = document.getElementById("rankings-message");
+const scores = [...getScores()].sort((first, second) => second.score - first.score);
 
-  if (navLogin) navLogin.hidden = email !== null;
-  if (navRegister) navRegister.hidden = email !== null;
-  if (navUser) navUser.hidden = email === null;
-
-  if (email && avatar) {
-    const user = getUsers().find(item => item.email === email);
-
-    if (user) {
-      avatar.textContent = user.fullName.charAt(0).toUpperCase();
-      avatar.title = user.fullName;
-    }
-  }
+if (scores.length === 0) {
+  message.textContent = "No scores yet. Be the first to play.";
 }
 
-function setupLogout() {
-  const button = document.getElementById("logout-btn");
-
-  if (button) {
-    button.addEventListener("click", () => {
-      clearSession();
-      window.location.href = "index.html";
-    });
-  }
-}
-
-function showMessage(element, text, type) {
-  if (!element) return;
-
-  element.textContent = text;
-  element.classList.remove("success", "failure");
-
-  if (type) {
-    element.classList.add(type);
-  }
-}
-
-// Run on every page.
-updateNav();
-setupLogout();
+scores.forEach((entry, index) => {
+  const row = document.createElement("tr");
+  // textContent is used so a player's name can never inject HTML
+  [index + 1, entry.name, entry.score].forEach((value) => {
+    const cell = document.createElement("td");
+    cell.textContent = value;
+    row.appendChild(cell);
+  });
+  tableBody.appendChild(row);
+});

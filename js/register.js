@@ -1,7 +1,4 @@
-updateNav();
-setupLogout();
-
-// Registration page: validates every field with JavaScript, then saves the new user as JSON.
+// Registration page validates every field with JavaScript, then saves the new user as JSON.
 
 const form = document.getElementById("register-form");
 const message = document.getElementById("form-message");
