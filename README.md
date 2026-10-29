@@ -1,6 +1,6 @@
 MAZE BE CRAZY
 
-Maze Be Crazy is a browser-based, single-player maze survival game website created for Inspired by the maze survival of The Maze Runner, the project challenges players to navigate dangerous corridors, survive monster attacks and find the exit.
+Maze Be Crazy is a browser based, single player maze survival game website created for Inspired by the maze survival of The Maze Runner, the project challenges players to navigate dangerous corridors, survive monster attacks and find the exit.
 
 Features
 
@@ -14,4 +14,3 @@ Features
 - Echo ability that temporarily reveals more of the maze, with a cooldown.
 - Scoring system and a rankings interface.
 - Registration and login interfaces with space for inline validation feedback.
-

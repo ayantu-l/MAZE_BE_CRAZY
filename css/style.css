@@ -4,7 +4,6 @@
   padding: 0;
 }
 :root {
- 
   --primary: #ff4757;
   --primary-hover: #ff6b81;
   --text: #f1f2f6;
@@ -36,7 +35,6 @@
   --game-exit-glow-clear: rgba(108, 242, 154, 0);
 }
 
-
 body {
   min-height: 100vh;
   display: flex;
@@ -44,8 +42,6 @@ body {
   color: var(--text);
   font-family: "Courier New", Courier, monospace;
   line-height: 1.5;
-
-  
   background-image: url("../images/background.png");
   background-size: cover;
   background-position: center;
@@ -54,9 +50,7 @@ body {
 }
 
 /* Stops the page scrolling while the intro plays */
-body.no-scroll {
-  overflow: hidden;
-}
+body.no-scroll { overflow: hidden; }
 
 /* Header and navigation */
 
@@ -636,8 +630,6 @@ p a:hover {
     max-width: 100%;
   }
 }
-
-
 
 /* Intro splash home page only */
 .intro {

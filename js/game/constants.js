@@ -128,7 +128,21 @@ export const LEVELS = [
     entrance: { horizontal: 40, vertical: 562 },
     exit: { horizontal: 1214, vertical: 562 },
   },
+
+  {
+    name: "Mossy Ruins",
+    mazeFile: "images/mazes/level2.png",
+    mapFile: "images/maps/level2.png",
+    light: 0.85,
+    playerSpeed: 135,
+    monsterCount: 8,
+    monsterStats: { health: 4, speed: 68, damage: 11 },
+    entrance: { horizontal: 40, vertical: 574 },
+    exit: { horizontal: 1131, vertical: 575 },
+  },
+
 ];
+  
 
 // The exit of a maze. The level is finished when the player comes closer than `reach`.
 export const EXIT = { reach: 60, scale: 1.3, lift: 20, glowRadius: 120 };
