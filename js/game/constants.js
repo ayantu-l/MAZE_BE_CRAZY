@@ -140,6 +140,18 @@ export const LEVELS = [
     entrance: { horizontal: 40, vertical: 574 },
     exit: { horizontal: 1131, vertical: 575 },
   },
+  {
+    name: "Lava Caves",
+    mazeFile: "images/mazes/level3.png",
+    mapFile: "images/maps/level3.png",
+    light: 0.7,
+    playerSpeed: 140,
+    monsterCount: 10,
+    monsterStats: { health: 4, speed: 88, damage: 14 },
+    entrance: { horizontal: 40, vertical: 590 },
+    exit: { horizontal: 1214, vertical: 591 },
+  },
+
 
 ];
   
