@@ -38,7 +38,7 @@ export class Assets {
     await Promise.all(files.map(([name, filePath]) => this.loadImage(name, filePath)));
 
     for (const soundName of Object.keys(SOUND_VOLUMES)) {
-      const sound = new Audio("../sounds/" + soundName + ".wav");
+      const sound = new Audio("../images/sounds/" + soundName + ".wav");
       sound.preload = "auto";
       this.sounds[soundName] = sound;
     }

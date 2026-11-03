@@ -48,9 +48,7 @@ export class Enemy extends Entity {
   // True when the player is within biting range along the corridors so a monster cannot bite through a wall
   isCloseByPath(distance, routes) {
     const steps = routes.stepsTo(routes.squareAt(this.position));
-    return distance >= MONSTER.biteRange && 
-    steps < 0 &&
-    steps * routes.tileSize < MONSTER.biteRange * 1.5;
+    return distance < MONSTER.biteRange && (steps < 0 || steps * routes.tileSize < MONSTER.biteRange * 1.5);
   }
 
   // Moves towards the middle of the target square When it gets there, the next square is chosen.
