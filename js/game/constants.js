@@ -1,9 +1,8 @@
 // Settings shared by the whole game. Everything is grouped in objects so it can be changed in one place.
 // A position is always an object like horizontal, vertical , measured in game pixels.
 
-// The maze pictures are drawn scale times bigger than the files. For route finding the maze is cut into squares of cellPixels picture pixels. Monsters keep afeMargin squares away from every wall.
+// The maze pictures are drawn scale times bigger than the files. For route finding the maze is cut into squares of cellPixels picture pixels
 export const SCREEN = { width: 1280, height: 720, font: '"Courier New", Courier, monospace' };
-
 export const MAZE_GRID = { scale: 1.5, cellPixels: 4 };
 export const TILE_SIZE = MAZE_GRID.cellPixels * MAZE_GRID.scale;
 
@@ -24,7 +23,7 @@ export const NEIGHBOUR_STEPS = Object.values(DIRECTIONS).map(({ horizontal, vert
 // picture (0 to 1) and every animation (row of the sheet, number of pictures, speed and whether it repeats).
 export const SPRITES = {
   player: {
-    file: "images/player.png",
+    file: "../images/player.png",
     frameSize: { width: 90, height: 118 },
     columns: 7,
     feet: { horizontal: 0.5, vertical: 0.9661 },
@@ -46,7 +45,7 @@ export const SPRITES = {
     },
   },
   monster: {
-    file: "images/monster.png",
+    file: "../images/monster.png",
     frameSize: { width: 148, height: 107 },
     columns: 6,
     feet: { horizontal: 0.5, vertical: 0.9626 },
@@ -114,13 +113,13 @@ export const MONSTER = {
 
 export const SCORE = { kill: 100, levelBonus: 200, timeBonus: 150 };
 
-// The levels (to add the next one, copy the object below and change the values, see the README).
+// The levels (to add the next one, copy the object below and change the values
 // Positions are in pixels of the maze picture: the entrance is the gap in the left wall, the exit the gap in the right wall. Every level has more and tougher monsters and less light.
 export const LEVELS = [
   {
     name: "Stone Dungeon",
-    mazeFile: "images/mazes/level1.png",
-    mapFile: "images/maps/level1.png",
+    mazeFile: "../images/mazes/level1.png",
+    mapFile: "../images/maps/level1.png",
     light: 1.0,
     playerSpeed: 130,
     monsterCount: 6,
@@ -131,8 +130,8 @@ export const LEVELS = [
 
   {
     name: "Mossy Ruins",
-    mazeFile: "images/mazes/level2.png",
-    mapFile: "images/maps/level2.png",
+    mazeFile: "../images/mazes/level2.png",
+    mapFile: "../images/maps/level2.png",
     light: 0.85,
     playerSpeed: 135,
     monsterCount: 8,
@@ -142,8 +141,8 @@ export const LEVELS = [
   },
   {
     name: "Lava Caves",
-    mazeFile: "images/mazes/level3.png",
-    mapFile: "images/maps/level3.png",
+    mazeFile: "../images/mazes/level3.png",
+    mapFile: "../images/maps/level3.png",
     light: 0.7,
     playerSpeed: 140,
     monsterCount: 10,
@@ -180,7 +179,7 @@ export const SOUND_VOLUMES = {
 };
 
 // Pictures that are not sprite sheets or mazes
-export const PICTURES = { bullet: "images/bullet.png", exit: "images/exit.png" };
+export const PICTURES = { bullet: "../images/bullet.png", exit: "../images/exit.png" };
 
 // Colours used for texts, bars and the darkness. They are written in css/style.css (the --game-... variables)
 // and read from there, so all colours of the website and the game are in one place.

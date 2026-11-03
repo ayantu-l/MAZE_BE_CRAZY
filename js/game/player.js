@@ -1,4 +1,4 @@
-// The player the Gun (rule 1, Weapon Overheat) and the Player who walks, shoots and is hurt.
+// The player the Gun Weapon Overheat and the Player who walks, shoots and is hurt.
 import { DIRECTIONS, GUN, PLAYER, SPRITES, TIMING } from "./constants.js";
 import { Entity, directionName, moveBy, scaleBy } from "./engine.js";
 
@@ -13,7 +13,7 @@ const KEY_BINDINGS = {
 // The key that fires the gun
 const FIRE_KEY = " ";
 
-// Gun: keeps the heat of the weapon and its upgrade level.
+// Gun keeps the heat of the weapon 
 // Ammo is unlimited, but firing too fast fills the heat bar and jams the gun for 5 seconds.
 export class Gun {
   constructor() {
@@ -57,10 +57,9 @@ export class Gun {
   }
   }
 
-
 // Player the hero. Walks with W A S D or the arrow keys and shoots with the space bar.
 export class Player extends Entity {
-  // position is where his feet start stats has the speed, the gun level and the health
+  // position is where his feet start stats has the speed and the health
   constructor(image, position, { speed, health }) {
     super(image, SPRITES.player, position, "idle-down");
     this.speed = speed;
@@ -140,7 +139,7 @@ export class Player extends Entity {
     this.timers.shootUntil = time + TIMING.shootMs;
     return outcome;
   }
-
+// moves every bullet and removes the ones that hit a wall or flew too long
   moveBullets(time, seconds, collision) {
     const activeBullets = [];
     for (const bullet of this.bullets) {
@@ -159,9 +158,9 @@ export class Player extends Entity {
     if (time < this.timers.hurtUntil) {
       this.animator.play("hurt");
     } else if (time < this.timers.shootUntil) {
-      this.animator.play(`shoot-${this.facing}`);
+      this.animator.play("shoot-" + this.facing);
     } else {
-      this.animator.play(`${this.isMoving ? "walk" : "idle"}-${this.facing}`);
+      this.animator.play((this.isMoving ? "walk" : "idle") + "-" + this.facing);
     }
   }
 

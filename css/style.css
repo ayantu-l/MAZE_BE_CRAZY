@@ -466,19 +466,12 @@ p a:hover {
   margin-bottom: 2rem;
 }
 
-.glitch-title {
+.title {
   color: var(--primary);
   font-size: 2.5rem;
   letter-spacing: 4px;
   text-shadow: 2px 2px 8px rgba(255, 71, 87, 0.5);
   margin-bottom: 0.5rem;
-}
-
-.terminal-status {
-  color: var(--primary);
-  font-size: 0.85rem;
-  letter-spacing: 2px;
-  margin-top: 0;
 }
 
 /* Game story */

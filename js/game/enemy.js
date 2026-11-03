@@ -2,7 +2,7 @@
 import { MONSTER, NEIGHBOUR_STEPS, SPRITES, TIMING } from "./constants.js";
 import { Entity, directionName, distanceBetween, moveBy, scaleBy } from "./engine.js";
 
-// Enemy walks from the middle of one safe square to the middle of the next.
+// Enemy walks from the middle of one floor square to the middle of the next.
 // It wanders until it sees the player (or hears the echo), then follows the shortest way to him.
 export class Enemy extends Entity {
   // stats holds the health, speed and damage of this levels monsters
@@ -30,7 +30,7 @@ export class Enemy extends Entity {
       return false;
     }
 
-    // A monster hunts when the player is close or when the echo told it where he is (rule 3)
+    // A monster hunts when the player is close or when the echo told it where he is 
     const distance = distanceBetween(this.position, player.position);
     this.isHunting = distance < MONSTER.seeRange || time < this.timers.alertUntil;
 
@@ -48,7 +48,9 @@ export class Enemy extends Entity {
   // True when the player is within biting range along the corridors so a monster cannot bite through a wall
   isCloseByPath(distance, routes) {
     const steps = routes.stepsTo(routes.squareAt(this.position));
-    return distance < MONSTER.biteRange && (steps < 0 || steps * routes.tileSize < MONSTER.biteRange * 1.5);
+    return distance >= MONSTER.biteRange && 
+    steps < 0 &&
+    steps * routes.tileSize < MONSTER.biteRange * 1.5;
   }
 
   // Moves towards the middle of the target square When it gets there, the next square is chosen.
@@ -110,13 +112,13 @@ export class Enemy extends Entity {
   // Chooses the animation: attacking, hurt, running or walking
   chooseAnimation(time) {
     if (time < this.timers.attackUntil) {
-      this.animator.play(`attack-${this.facing}`);
+      this.animator.play("attack-" + this.facing);
     } else if (time < this.timers.hurtUntil) {
       this.animator.play("hurt");
     } else if (this.isHunting && this.facing === "down") {
       this.animator.play("run-down");
     } else {
-      this.animator.play(`walk-${this.facing}`);
+      this.animator.play("walk-" + this.facing);
     }
   }
 // True when the point is inside the monster's body used for bullets

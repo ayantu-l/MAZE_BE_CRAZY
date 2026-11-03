@@ -16,7 +16,7 @@ export class Assets {
         this.images[name] = image;
         resolve();
       };
-      image.onerror = () => reject(new Error(`Cannot load the picture ${path}`));
+      image.onerror = () => reject(new Error("Cannot load the picture " + path));
       image.src = path;
     });
   }
@@ -31,14 +31,14 @@ export class Assets {
 
     for (let levelIndex = 0; levelIndex < LEVELS.length; levelIndex++) {
       const level = LEVELS[levelIndex];
-      files.push([`maze${levelIndex + 1}`, level.mazeFile]);
-      files.push([`map${levelIndex + 1}`, level.mapFile]);
+      files.push(["maze" + (levelIndex + 1), level.mazeFile]);
+      files.push(["map" + (levelIndex + 1), level.mapFile]);
     }
 
     await Promise.all(files.map(([name, filePath]) => this.loadImage(name, filePath)));
 
     for (const soundName of Object.keys(SOUND_VOLUMES)) {
-      const sound = new Audio(`sounds/${soundName}.wav`);
+      const sound = new Audio("../sounds/" + soundName + ".wav");
       sound.preload = "auto";
       this.sounds[soundName] = sound;
     }
@@ -62,6 +62,7 @@ export class SoundManager {
     copy.play().catch(() => {});
   }
 
+  // Starts the music loop of the level
   startMusic() {
     this.sounds.explore.loop = true;
     this.sounds.explore.volume = SOUND_VOLUMES.explore;
@@ -69,6 +70,7 @@ export class SoundManager {
     this.followSoundButton();
   }
 
+  // Stops the music and rewinds it
   stopMusic() {
     this.isMusicOn = false;
     this.sounds.explore.pause();

@@ -94,6 +94,8 @@ export class GameScene {
     this.level = null;
     this.bannerUntil = 0;
     this.result = { won: false, save: "guest" };
+    this.savedScore = 0;
+    this.hasNewBest = false;
 
     // The menu is shown by game.js it sets this function
     this.onExit = () => {};
@@ -102,6 +104,10 @@ export class GameScene {
 
   // Starts level number (1 to 3) carried is what the player brings from the last level.
   startLevel(number, carried = FRESH_START) {
+    if (carried === FRESH_START) {
+      this.savedScore = 0;
+      this.hasNewBest = false;
+    }
     this.keys.forgetPresses();
     this.level = new Level(number, this.assets, this.sounds, carried, this.time);
     this.state = "playing";
@@ -131,6 +137,7 @@ export class GameScene {
   update(seconds) {
     if (this.state === "playing") {
       this.level.update(this.time, seconds, this.keys);
+      this.saveWhenScoreGoesUp();
       if (this.keys.wasPressed("escape")) {
         this.quit();
       } else if (this.level.status === "dead") {
@@ -159,7 +166,24 @@ export class GameScene {
   finish(won) {
     this.state = "end";
     this.sounds.stopMusic();
-    this.result = { won, save: this.scoreBoard.save(this.level.score) };
+    this.result = { won, save: this.saveScore() };
+  }
+      // Saves the score to the rankings. ScoreBoard only replaces a lower score, so saving often is safe.
+  // Returns guest, saved or kept. Once this run has set a new best, the end screen says saved.
+  saveScore() {
+    this.savedScore = this.level.score;
+    const outcome = this.scoreBoard.save(this.level.score);
+    if (outcome === "saved") {
+      this.hasNewBest = true;
+    }
+    return this.hasNewBest ? "saved" : outcome;
+  }
+
+  // Saves straight away whenever the score goes up (a monster killed or a level finished)
+  saveWhenScoreGoesUp() {
+    if (this.level.score > this.savedScore) {
+      this.saveScore();
+    }
   }
 
   // Draws the level with the banner or the end screen on top when they are shown
@@ -168,14 +192,14 @@ export class GameScene {
     if (this.state === "between") {
       this.level.draw(this.context, this.time);
       this.drawScreen(COLOURS.bannerBack, [
-        { text: `LEVEL ${number} COMPLETE`, vertical: 350, size: 48, colour: COLOURS.good },
-        { text: `SCORE ${score}`, vertical: 405, size: 28, colour: COLOURS.text },
+        { text: "LEVEL " + number + " COMPLETE", vertical: 350, size: 48, colour: COLOURS.good },
+        { text: "SCORE " + score, vertical: 405, size: 28, colour: COLOURS.text },
       ]);
     } else if (this.state === "end") {
       const { won, save } = this.result;
       this.drawScreen(COLOURS.endBack, [
         { text: won ? "YOU ESCAPED!" : "GAME OVER", vertical: 260, size: 64, colour: won ? COLOURS.good : COLOURS.danger },
-        { text: `FINAL SCORE: ${score}`, vertical: 340, size: 30, colour: COLOURS.text },
+        { text: "FINAL SCORE: " + score, vertical: 340, size: 30, colour: COLOURS.text },
         { text: SAVE_MESSAGES[save], vertical: 395, size: 20, colour: COLOURS.muted },
         { text: "PRESS R TO CHOOSE A LEVEL", vertical: 470, size: 24, colour: COLOURS.text },
       ]);

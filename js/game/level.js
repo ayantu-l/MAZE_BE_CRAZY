@@ -17,7 +17,7 @@ export class Level {
     this.definition = LEVELS[number - 1];
     this.images = assets.images;
     this.sounds = sounds;
-    this.maze = new Maze(this.images[`maze${number}`], this.images[`map${number}`], this.definition);
+    this.maze = new Maze(this.images["maze" + number], this.images["map" + number], this.definition);
     this.player = new Player(this.images.player, this.maze.entrance, {
       speed: this.definition.playerSpeed,
       health: carried.health,
@@ -42,7 +42,7 @@ export class Level {
     this.nextGrowlAt = 0;
     this.nextRouteUpdateAt = 0;
     this.routeOrigin = null;
-    this.hud.flash(`LEVEL ${number}: ${this.definition.name.toUpperCase()}`, COLOURS.danger, time);
+    this.hud.flash("LEVEL " + number + ": " + this.definition.name.toUpperCase(), COLOURS.danger, time);
   }
 
   // What the player takes to the next level
@@ -95,7 +95,7 @@ export class Level {
     }
   }
 
-  // Rule 3 the echo alerts every monster
+  // the echo alerts every monster
   startEcho(time) {
     this.sounds.play("echo");
     this.hud.flash("ECHO! They know where you are.", COLOURS.echo, time);

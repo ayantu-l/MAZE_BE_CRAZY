@@ -60,7 +60,7 @@ class CollisionMap {
   }
 }
 
-// RouteGri knows which squares are floor which are safe and how far every square is from a start square.
+// RouteGrid knows which squares are floor which are safe and how far every square is from a start square.
 class RouteGrid {
   // Builds the grids from the collision map
   constructor(collisionMap) {
@@ -125,7 +125,7 @@ class RouteGrid {
     return next.find((candidate) => this.isFloor(candidate)) ?? square;
   }
 
-  // Counts how many steps every safe square is away from start (breadth first search).
+  // Counts how many steps every floor square is away from start (breadth first search).
   // Squares that cannot be reached get -1.
   measureFrom(start) {
     this.steps.fill(-1);

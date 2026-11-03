@@ -32,7 +32,7 @@ export function clamp(value, lowest, highest) {
   return Math.max(lowest, Math.min(value, highest));
 }
 
-// The main direction of an offset left, ight, up or down
+// The main direction of an offset left, right, up or down
 export function directionName(offset) {
   if (Math.abs(offset.horizontal) >= Math.abs(offset.vertical)) {
     return offset.horizontal < 0 ? "left" : "right";
@@ -77,7 +77,7 @@ class Animator {
 
 // Entity the base of the player and the monsters. It has a position (the feet) and an animated sprite.
 export class Entity {
-  //imag` is the sprite sheet, spec an entry of SPRITES, position where the feet are
+  //image is the sprite sheet, spec an entry of SPRITES, position where the feet are
   constructor(image, spec, position, firstAnimation) {
     this.image = image;
     this.spec = spec;
@@ -117,7 +117,7 @@ export class Entity {
 
 // Draws text with a black outline so that it can be read on every maze
 export function drawText(context, text, position, size, colour, align) {
-  context.font = `bold ${size}px ${SCREEN.font}`;
+  context.font = "bold " + size + "px " + SCREEN.font;
   context.textAlign = align;
   context.lineWidth = 4;
   context.strokeStyle = COLOURS.outline;
@@ -173,7 +173,7 @@ export class Echo {
     return true;
   }
 
-  // Text for the HU ready, running or recharging
+  // Text for the HUD ready, running or recharging
   statusText(time) {
     if (this.isActive(time)) {
       return "ECHO!";
@@ -181,10 +181,10 @@ export class Echo {
     if (time >= this.readyAt) {
       return "[E] ECHO READY";
     }
-    return `ECHO ${Math.ceil((this.readyAt - time) / 1000)}s`;
+    return "ECHO " + Math.ceil((this.readyAt - time) / 1000) + "s";
   }
 
-  // Draws one dot on the map osition is a place in the maze, the map is shown at corner.
+  // Draws one dot on the map position is a place in the maze, the map is shown at corner.
   drawDot(context, position, colour, radius, maze, corner, shown) {
     context.fillStyle = colour;
     context.beginPath();
@@ -257,7 +257,7 @@ export class Hud {
     // The texts on the left
     drawText(context, "HP", { horizontal: 16, vertical: 26 }, 14, COLOURS.text, "left");
     if (jammed) {
-      drawText(context, `JAM ${Math.ceil(gun.jamSecondsLeft(time))}`, { horizontal: 16, vertical: 50 }, 14, COLOURS.warning, "left");
+      drawText(context, "JAM " + Math.ceil(gun.jamSecondsLeft(time)), { horizontal: 16, vertical: 50 }, 14, COLOURS.warning, "left");
     } else {
       drawText(context, "HEAT", { horizontal: 16, vertical: 50 }, 14, COLOURS.text, "left");
     }
@@ -265,7 +265,7 @@ export class Hud {
 
     // The texts on the right
     drawText(context, String(level.score), { horizontal: right, vertical: 30 }, 24, COLOURS.good, "right");
-    drawText(context, `LEVEL ${level.number}  ${level.definition.name.toUpperCase()}`, { horizontal: right, vertical: 56 }, 16, COLOURS.muted, "right");
+    drawText(context, "LEVEL " + level.number + "  " + level.definition.name.toUpperCase(), { horizontal: right, vertical: 56 }, 16, COLOURS.muted, "right");
     drawText(context, "WASD: MOVE  SPACE: SHOOT  E: ECHO  F: FULLSCREEN  ESC: MENU", { horizontal: right, vertical: bottom }, 14, COLOURS.muted, "right");
 
     // The notice fades out during its last 700 milliseconds

@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Play | Maze Be Crazy</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="images/logo.png" type="image/png">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../images/logo.png" type="image/png">
 </head>
 <body data-page="game">
   <!-- Navigation bar -->
   <header class="site-header">
     <a class="brand" href="index.html">
-      <img src="images/logo.png" alt="" width="44" height="44">
+      <img src="../images/logo.png" alt="" width="44" height="44">
       <span>MAZE BE CRAZY</span>
     </a>
     <nav aria-label="Main navigation">
@@ -56,17 +56,17 @@
     </section>
 
     <!-- Game canvas -->
-    <section id="game-container" hidden>
+    <div id="game-container" hidden>
       <canvas id="game-canvas" width="1280" height="720">
         Your browser does not support the canvas element.
       </canvas>
-    </section>
+    </div>
   </main>
 <!-- Footer -->
   <footer class="site-footer"> @2026 Maze Be Crazy. All rights reserved.</footer>
 
-  <script src="js/storage.js"></script>
-  <script src="js/auth.js"></script>
-  <script type="module" src="js/game.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/auth.js"></script>
+  <script type="module" src="../js/game.js"></script>
 </body>
 </html>

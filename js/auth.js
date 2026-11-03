@@ -63,4 +63,3 @@ function showMessage(element, text, type) {
 updateNav();
 setupLogout();
 setupSoundToggle();
-document.body.classList.add("ready");

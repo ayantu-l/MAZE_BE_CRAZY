@@ -17,7 +17,7 @@ let introTimer = null;
   } else {
     sessionStorage.setItem(INTRO_KEY, "yes");
     intro.hidden = false;
-    document.body.classList.add = ("no-scroll");
+    document.body.classList.add("no-scroll");
     
     intro.offsetWidth;
     intro.classList.add("playing");

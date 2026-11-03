@@ -40,9 +40,10 @@ function isValidEmail(value) {
 // Accepts only UAE mobile numbers: +971 5X XXXXXXX, 00971 5X XXXXXXX or 05X XXXXXXX (spaces and dashes allowed)
 function isValidPhone(value) {
   const digits = value.replace(/[\s-]/g, "");
-  return /^(\+971|0)5[024568]\d{7}$/.test(digits);
+  return /^(\+971|00971|05[024569])\d{7}$/.test(digits);
 }
 
+// True when the password has at least 8 characters, an uppercase letter, a lowercase letter and a number
 function isValidPassword(value) {
   return value.length >= 8 &&
     /[A-Z]/.test(value) &&
@@ -50,6 +51,7 @@ function isValidPassword(value) {
     /[0-9]/.test(value);
 }
 
+// Checks every field and shows a message under each one that is wrong returns true when all are valid
 function validate() {
   let valid = true;
 
@@ -80,7 +82,7 @@ function validate() {
     phoneInput.classList.add("invalid");
     valid = false;
   } else if (!isValidPhone(phone)) {
-    phoneError.textContent = "Phone must contain 7 to 15 digits.";
+    phoneError.textContent = "Enter a UAE mobile number";
     phoneInput.classList.add("invalid");
     valid = false;
   }
