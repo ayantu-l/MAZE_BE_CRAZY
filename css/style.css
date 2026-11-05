@@ -359,11 +359,11 @@ p a:hover {
   font-weight: 600;
 }
 
-/* Gold, silver and bronze for the top three scores */
-.rankings-table tbody tr:nth-child(1) td { color: #ffd45e; }
-.rankings-table tbody tr:nth-child(2) td { color: #d5dde0; }
-.rankings-table tbody tr:nth-child(3) td { color: #d9955a; }
-
+/* Highlight the logged-in player's row */
+.rankings-table tbody tr.own-score td {
+  font-weight: bold;
+  background: rgba(255, 71, 87, 0.12);
+}
 /*  Game page  */
 
 .game-main {

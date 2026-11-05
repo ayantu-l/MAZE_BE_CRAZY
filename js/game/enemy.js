@@ -16,8 +16,6 @@ export class Enemy extends Entity {
     this.lastStep = null;
     this.timers = { diedAt: 0, alertUntil: 0, hurtUntil: 0, attackUntil: 0, nextBiteAt: 0 };
   }
-
-  // The size of the picture it grows with every mutation
   get size() {
     return MONSTER.size;
   }

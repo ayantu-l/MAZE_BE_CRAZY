@@ -1,7 +1,7 @@
 // The engine small helpers and the building blocks the game is made of.
-//   helpers  - distance, moving and scaling positions (a position is horizontal, vertical )
-//   Animator and Entity - an animated sprite at a position (the base of the player and the monsters)
-//   drawText, Darkness, Echo, Hud - everything that is drawn over the maze
+//   helpers distance, moving and scaling positions (a position is horizontal, vertical )
+//   Animator and Entity an animated sprite at a position (the base of the player and the monsters)
+//   drawText, Darkness, Echo, Hud everything that is drawn over the maze
 import { COLOURS, DARKNESS, ECHO, GUN, PLAYER, SCREEN, TIMING } from "./constants.js";
 
 // How far apart two positions are

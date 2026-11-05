@@ -19,7 +19,7 @@ export const NEIGHBOUR_STEPS = Object.values(DIRECTIONS).map(({ horizontal, vert
   rows: vertical,
 }));
 
-// Sprite sheets: the file, the size of one picture, the number of columns, where the feet are inside one
+// Sprite sheets the file, the size of one picture, the number of columns, where the feet are inside one
 // picture (0 to 1) and every animation (row of the sheet, number of pictures, speed and whether it repeats).
 export const SPRITES = {
   player: {
@@ -66,7 +66,7 @@ export const SPRITES = {
   },
 };
 
-// The player body is the small box at his feet that touches the walls. `muzzle` is where a bullet leaves
+// The player body is the small box at his feet that touches the walls. muzzle is where a bullet leaves
 // the gun for every direction, measured from his feet in sprite pixels.
 export const PLAYER = {
   size: 1.1,
@@ -81,7 +81,6 @@ export const PLAYER = {
 };
 
 // Weapon Overheat ammo is unlimited, but every shot heats the gun. A full gun jams for jamMs.
-// Every upgrade (rule 2) makes the gun shoot faster and heat up less, up to maxLevel.
 export const GUN = {
   damage: 1,
   delayMs: 230,

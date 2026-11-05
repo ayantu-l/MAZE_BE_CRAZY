@@ -2,7 +2,6 @@
 import { MAZE_GRID, NEIGHBOUR_STEPS, PLAYER, SCREEN, TILE_SIZE } from "./constants.js";
 import { distanceBetween, scaleBy } from "./engine.js";
 
-// CollisionMap answers is this point inside a wall? for the player, the bullets and the monster
 // White pixels of the map are floor, black pixels are walls.
 // mapImage has the same size as the maze picture, so the walls match the picture exactly.
 // scale is how much bigger the picture is drawn in the game.

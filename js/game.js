@@ -2,43 +2,54 @@
 import { Assets } from "./game/assets.js";
 import { GameScene } from "./game/gamescene.js";
 
-const canvas = document.getElementById("game-canvas");
-const menu = document.getElementById("level-selection");
-const container = document.getElementById("game-container");
-const buttons = document.querySelectorAll(".level-btn");
+// gamePage connects the level menu and the canvas to the game
+class GamePage {
+  constructor() {
+    this.menu = document.getElementById("level-selection");
+    this.container = document.getElementById("game-container");
+    this.assets = new Assets();
+    this.loading = this.assets.load();
+    this.game = null;
 
-const assets = new Assets();
-const loading = assets.load();
-let game = null;
-
-// Shows the level menu and hides the game
-function showMenu() {
-  menu.hidden = false;
-  container.hidden = true;
-}
-
-// The files start loading as soon as the page opens. The buttons work at once: when a button is pressed
-// before the loading has finished, the level starts as soon as the files are ready.
-  buttons.forEach((button) => {
-    button.addEventListener("click", async () => {
-      await loading;
-      if (game === null) {
-        game = new GameScene(canvas, assets);
-        game.onExit = showMenu;
-      }
-      game.startLevel(Number(button.dataset.level));
-      menu.hidden = true;
-      container.hidden = false;
+    // each level button starts its level
+    document.querySelectorAll(".level-btn").forEach((button) => {
+      button.addEventListener("click", () => this.startLevel(Number(button.dataset.level)));
     });
-  });
 
-// Pressing F switches between the small game window and the full screen
-document.addEventListener("keydown", (event) => {
-  if (event.key.toLowerCase() === "f" && !container.hidden) {
+    // F switches full screen on and off
+    document.addEventListener("keydown", (event) => {
+      if (event.key.toLowerCase() === "f" && !this.container.hidden) {
+        this.toggleFullscreen();
+      }
+    });
+  }
+
+  //waits for the files then starts the chosen level
+  async startLevel(number) {
+    await this.loading;
+    if (this.game === null) {
+      this.game = new GameScene(document.getElementById("game-canvas"), this.assets);
+      this.game.onExit = () => this.showMenu();
+    }
+    this.game.startLevel(number);
+    this.menu.hidden = true;
+    this.container.hidden = false;
+  }
+
+  // shows the level menu and hides the game
+  showMenu() {
+    this.menu.hidden = false;
+    this.container.hidden = true;
+  }
+
+  // turns full screen on or off
+  toggleFullscreen() {
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
-      container.requestFullscreen();
+      this.container.requestFullscreen();
     }
   }
-});
+}
+
+new GamePage();
