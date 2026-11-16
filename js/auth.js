@@ -1,5 +1,5 @@
-// Shared by every page: navigation bar state, log out, sound button and form messages.
-// Show Login/Register for visitors, or the avatar and Log out button for a signed-in user
+// it update the navigation, logout and sound button
+// show Login or the user avatar based on the session
 function updateNav() {
   const sessionEmail = getSession();
   const navLogin = document.getElementById("nav-login");
@@ -27,7 +27,7 @@ function updateNav() {
   }
 }
 
-// Log out button forget the session and go back to the home page
+// it will remove the login session when Log out is clicked
 function setupLogout() {
   const button = document.getElementById("logout-btn");
   if (!button) return;
@@ -37,7 +37,8 @@ function setupLogout() {
     window.location.href = "index.html";
   });
 }
-// Round sound button remembers the choice, which the game reads when it starts and while it runs
+
+// let users switch sound on or off
 function setupSoundToggle() {
   const button = document.getElementById("sound-toggle");
   if (!button) return;
@@ -59,7 +60,7 @@ function showMessage(element, text, type) {
   }
 }
 
-// Every page that loads this file gets the navigation bar, log out button and sound button
+// every page that loads this file gets the navigation bar log out button and sound button
 updateNav();
 setupLogout();
 setupSoundToggle();

@@ -34,7 +34,7 @@
       <h1>LOGIN</h1>
       <div id="form-message" class="message" role="status"></div>
 
-      <form id="login-form" novalidate>
+      <div id="login-form">
         <div class="field">
           <label for="email">Email</label>
           <input type="text" id="email" name="email" autocomplete="email">
@@ -47,8 +47,9 @@
           <span class="error" id="password-error" role="alert"></span>
         </div>
 
-        <button type="submit" class="button">LOGIN</button>
-      </form>
+        <button type="button" id="login-btn" class="button">LOGIN</button>
+      </div>
+
 
       <p>Don't have an account? <a href="register.html">Register</a></p>
     </section>

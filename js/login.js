@@ -1,13 +1,14 @@
-// Login page: checks the details and gives a specific message for each problem.
+// checks the logindetails and gives a specific message for each problem
 
 const form = document.getElementById("login-form");
+const loginButton = document.getElementById("login-btn");
 const message = document.getElementById("form-message");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
 
-// Remove every error message and red border from the form
+// removs every error message and red border from the form
 function clearErrors() {
   emailError.textContent = "";
   passwordError.textContent = "";
@@ -16,7 +17,7 @@ function clearErrors() {
   showMessage(message, "", null);
 }
 
-// Check that both boxes are filled in; returns true when they are
+// check that both boxes are filled in and returns true when they are
 function validate() {
   let valid = true;
 
@@ -34,8 +35,8 @@ function validate() {
 
   return valid;
 }
-
-form.addEventListener("submit", (event) => {
+// run these checks when login is clicked
+loginButton.addEventListener("click", (event) => {
   event.preventDefault();
   clearErrors();
 
@@ -46,6 +47,7 @@ form.addEventListener("submit", (event) => {
   const email = emailInput.value.trim().toLowerCase();
   const password = passwordInput.value;
 
+   //it find the account with the entered email
   const users = getUsers();
   const user = users.find(registered => registered.email === email);
 
@@ -65,4 +67,14 @@ form.addEventListener("submit", (event) => {
   setTimeout(() => {
     window.location.href = "game.html";
   }, 800);
+});
+
+loginButton.addEventListener("click", handleLogin);
+
+// Pressing Enter in an input also runs the same checks.
+form.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    handleLogin();
+  }
 });

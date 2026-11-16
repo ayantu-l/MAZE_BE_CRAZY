@@ -1,11 +1,9 @@
-// The monsters Enemy a maze creature that wanders, hunts and bites 
+// it controls how monsters moves, chased and attacks
 import { MONSTER, NEIGHBOUR_STEPS, SPRITES, TIMING } from "./constants.js";
 import { Entity, directionName, distanceBetween, moveBy, scaleBy } from "./engine.js";
 
-// Enemy walks from the middle of one floor square to the middle of the next.
-// It wanders until it sees the player (or hears the echo), then follows the shortest way to him.
+// it will gives each monster movement, health and attacks
 export class Enemy extends Entity {
-  // stats holds the health, speed and damage of this levels monsters
   constructor(image, position, stats) {
     super(image, SPRITES.monster, position, "idle-down");
     this.stats = { ...stats };
@@ -20,15 +18,14 @@ export class Enemy extends Entity {
     return MONSTER.size;
   }
 
-  // Called every frame. routes knows how many steps every square is from the player.
-  // Returns true when the monster bit the player.
+  // it decides whether to hunt, bite or keep moving in the same direction
   update(time, seconds, player, routes) {
     this.animator.tick(seconds);
     if (this.isDying) {
       return false;
     }
 
-    // A monster hunts when the player is close or when the echo told it where he is 
+  // the measures how far the monster is from the player
     const distance = distanceBetween(this.position, player.position);
     this.isHunting = distance < MONSTER.seeRange || time < this.timers.alertUntil;
 
@@ -43,31 +40,32 @@ export class Enemy extends Entity {
     return bites;
   }
 
-  // True when the player is within biting range along the corridors so a monster cannot bite through a wall
+  // it will be true when the player is within biting range 
   isCloseByPath(distance, routes) {
     const steps = routes.stepsTo(routes.squareAt(this.position));
     return distance < MONSTER.biteRange && (steps < 0 || steps * routes.tileSize < MONSTER.biteRange * 1.5);
   }
 
-  // Moves towards the middle of the target square When it gets there, the next square is chosen.
+  // moves towards the middle of the target square When it gets there
   walk(seconds, routes) {
     const offset = {
       horizontal: this.target.horizontal - this.position.horizontal,
       vertical: this.target.vertical - this.position.vertical,
     };
+     // measure how far the monster is from its next target
     const remaining = Math.hypot(offset.horizontal, offset.vertical);
     if (remaining < MONSTER.arriveDistance) {
       this.chooseNextSquare(routes);
       return;
     }
 
+  // it move only as far as speed time without passing the target
     const speed = this.isHunting ? this.stats.speed : this.stats.speed * MONSTER.wanderSpeedFactor;
     this.position = moveBy(this.position, scaleBy(offset, Math.min(remaining, speed * seconds) / remaining));
     this.facing = directionName(offset);
   }
 
-  // Chooses the next square A hunting monster takes the neighbour closest to the player
-  // a wandering monster takes a random neighbour and does not turn bac
+  // chooses the next square a hunting monster takes the neighbour closest to the player
   chooseNextSquare(routes) {
     const here = routes.floorSquareAt(this.position);
     const options = [];
@@ -100,12 +98,12 @@ export class Enemy extends Entity {
     this.target = routes.centreOf(choice.square);
   }
 
-  // True when the step goes back the way the monster came from
+  // it shows true when the step goes back the way the monster came from
   isBehind(step) {
     return this.lastStep !== null && step.columns === -this.lastStep.columns && step.rows === -this.lastStep.rows;
   }
 
-  // Chooses the animation: attacking, hurt, running or walking
+  // chooses the animation attacking, hurt, running or walking
   chooseAnimation(time) {
     if (time < this.timers.attackUntil) {
       this.animator.play("attack-" + this.facing);
@@ -117,13 +115,13 @@ export class Enemy extends Entity {
       this.animator.play("walk-" + this.facing);
     }
   }
-// True when the point is inside the monster's body used for bullets
+// it showsrue when the point is inside the monster body used for bullets
   isHitBy(point) {
     const centre = moveBy(this.position, { horizontal: 0, vertical: -MONSTER.hitHeight * this.size });
     return distanceBetween(point, centre) < MONSTER.hitRadius * this.size;
   }
 
-// The monster is hit Returns true when it died
+// the monster is hit and returns true when it died
   takeHit(damage, time) {
     this.stats.health -= damage;
     this.timers.hurtUntil = time + TIMING.hurtMs;
@@ -136,12 +134,12 @@ export class Enemy extends Entity {
     return true;
   }
 
-  // True when the death animation has been shown and the monster can be removed
+  // it checks whether the monster has finished dying
   isGone(time) {
     return this.isDying && time - this.timers.diedAt > MONSTER.fadeAfterMs;
   }
 
-  // Draws the monster a dying monster slowly fades away
+  // draws the monster a dying monster slowly fades away when it dies 
   draw(context, camera, time) {
     context.globalAlpha = this.isDying ? Math.max(0, 1 - (time - this.timers.diedAt) / MONSTER.fadeAfterMs) : 1;
     super.draw(context, camera);

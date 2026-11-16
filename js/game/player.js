@@ -1,4 +1,4 @@
-// The player the Gun Weapon Overheat and the Player who walks, shoots and is hurt.
+// the movement of the player, shoot bullets and update health
 import { DIRECTIONS, GUN, PLAYER, SPRITES, TIMING } from "./constants.js";
 import { Entity, directionName, moveBy, scaleBy } from "./engine.js";
 
@@ -13,8 +13,8 @@ const KEY_BINDINGS = {
 // The key that fires the gun
 const FIRE_KEY = " ";
 
-// Gun keeps the heat of the weapon 
-// Ammo is unlimited, but firing too fast fills the heat bar and jams the gun for 5 seconds.
+
+// control when the player can shoot and when the gun jams
 export class Gun {
   constructor() {
     this.heat = 0;
@@ -22,17 +22,17 @@ export class Gun {
     this.nextShotAt = 0;
   }
 
-  // True while the gun is jammed
+  // check if the weapon is still jamme
   isJammed(time) {
     return time < this.jammedUntil;
   }
 
-  // Seconds left until the jam is over
+  // calaculate how many Seconds left until the jam is over
   jamSecondsLeft(time) {
     return Math.max(0, (this.jammedUntil - time) / 1000);
   }
 
-  // Called every frame: the heat goes down by itself. While jammed the heat bar slowly empties.
+  // it called every frame the heat goes down by itself while jammed the heat bar slowly emptie
   cool(time, seconds) {
     if (this.isJammed(time)) {
       this.heat = (GUN.maxHeat * (this.jammedUntil - time)) / GUN.jamMs;
@@ -41,7 +41,7 @@ export class Gun {
     }
   }
 
-  // Tries to fire Returns wait (cannot fire now), shot (fired) or jam (fired and the gun jammed).
+  // checkes if the gun can fire, then add heat
   fire(time) {
     if (this.isJammed(time) || time < this.nextShotAt) {
       return "wait";
@@ -57,9 +57,9 @@ export class Gun {
   }
   }
 
-// Player the hero. Walks with W A S D or the arrow keys and shoots with the space bar.
+// handles player movement, shooting and animations
 export class Player extends Entity {
-  // position is where his feet start stats has the speed and the health
+  // it shows the position is where his feet start stats has the speed and the health
   constructor(image, position, { speed, health }) {
     super(image, SPRITES.player, position, "idle-down");
     this.speed = speed;
@@ -72,13 +72,12 @@ export class Player extends Entity {
     this.bullets = [];
   }
 
-  // The player is a little bigger than his sprite sheet
+ // return the player sprite size
   get size() {
     return PLAYER.size;
   }
 
-  // Called every frame: walk, shoot, move the bullets and pick the right animation.
-  // Returns the outcome of the gun (wait, shot or jam) so the level can play the matching sound.
+ // it updates movement, bullets, gun heat and animation
   update(time, seconds, keys, collision) {
     this.gun.cool(time, seconds);
     this.moveBullets(time, seconds, collision);
@@ -93,7 +92,7 @@ export class Player extends Entity {
     return outcome;
   }
 
-  // Reads the keys and moves the player, one direction at a time so that he slides along walls
+  // Reads the keys and moves the playe in one direction at a time so that he slides along walls
   walk(seconds, keys, collision) {
     let movement = { horizontal: 0, vertical: 0 };
     for (const directionName of Object.keys(KEY_BINDINGS)) {
@@ -108,7 +107,7 @@ export class Player extends Entity {
       return;
     }
 
-    // The player faces the way he walks, and walking diagonally is not faster than walking straight
+    // the player faces the way he walks and walking diagonally is not faster than walking straight
     this.facing = directionName(movement);
     const step = scaleBy(movement, (this.speed * seconds) / strength);
 
@@ -121,7 +120,7 @@ export class Player extends Entity {
     }
   }
 
-  // Fires one bullet in the direction the player faces, if the gun allows it. Returns the outcome of the gun.
+// creates a bullet in the direction the player faces
   shoot(time) {
     const outcome = this.gun.fire(time);
     if (outcome === "wait") {
@@ -153,7 +152,7 @@ export class Player extends Entity {
     this.bullets = activeBullets;
   }
 
-  // Chooses the animation hurt, shooting, walking or standing still
+  // it chooses the animation hurt, shooting, walking or standing still
   chooseAnimation(time) {
     if (time < this.timers.hurtUntil) {
       this.animator.play("hurt");
@@ -164,18 +163,18 @@ export class Player extends Entity {
     }
   }
 
-  // Shows the hurt animation for a moment
+  // shows the hurt animation for a moment
   markHurt(time) {
     this.timers.hurtUntil = time + TIMING.hurtMs;
   }
 
-  // The player is dead play the death animation once
+  // the player is dead play the death animation once
   die() {
     this.isDead = true;
     this.animator.play("die");
   }
 
-  // Draws the bullets
+   // draws bullets at their current positions
   drawBullets(context, camera, image) {
     this.bullets.forEach((bullet) => {
       const onScreen = moveBy(bullet.position, scaleBy(camera, -1));

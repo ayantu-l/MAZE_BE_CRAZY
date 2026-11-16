@@ -1,15 +1,15 @@
-// GameScene runs a whole play session This file also holds the Keyboard and the ScoreBoard it uses.
+// gamescene runs a whole play session this file also holds the keyboard and the scoreboard it uses
 import { COLOURS, FRESH_START, LEVELS, SCREEN, TIMING } from "./constants.js";
 import { drawText } from "./engine.js";
 import { SoundManager } from "./assets.js";
 import { Level } from "./level.js";
 
-// Keys that would scroll the page if the browser got them
+// key that would scroll the page if the browser got them
 const PAGE_KEYS = [" ", "arrowup", "arrowdown", "arrowleft", "arrowright"];
 
-// Keyboard listens to the whole window.
+// it remember which keys are held or pressed
 class Keyboard {
-  // shouldBlockPageKeys is a function that says whether the page may not scroll right now
+  // shouldblockpageKeys is a function that says whether the page may not scroll right now
   constructor(shouldBlockPageKeys) {
     this.held = new Set();
     this.pressed = new Set();
@@ -25,16 +25,16 @@ class Keyboard {
       this.held.add(key);
     });
     window.addEventListener("keyup", (event) => this.held.delete(event.key.toLowerCase()));
-    // Forget all keys when the window loses focus, so the player never keeps walking by himself
+    // it forget all keys when the window loses focus so the player never keeps walking by himself
     window.addEventListener("blur", () => this.held.clear());
   }
 
-  // True while any of the keys is held down
+  // it return true while any of the keys is held down
   isDown(...keys) {
     return keys.some((key) => this.held.has(key));
   }
 
-  // True once for every new press of any of the keys
+  // it return true once for every new press of any of the keys
   wasPressed(...keys) {
     const result = keys.some((key) => this.pressed.has(key));
     keys.forEach((key) => this.pressed.delete(key));
@@ -46,12 +46,12 @@ class Keyboard {
     this.pressed.clear();
   }
 }
-
-// ScoreBoardreads and writes the list of scores.
+// it save only a logged in players best score
 class ScoreBoard {
-  // Saves the score and tells what happened guest (nobody is logged in) saved (a first score or a new personal best) or kept (the old score is higher)
+ // keeps the current score only if it is a new best
   save(score) {
     const email = getSession();
+        // find the logged in user before saving a score
     const user = getUsers().find((registered) => registered.email === email);
     if (user === undefined) {
       return "guest";
@@ -71,16 +71,16 @@ class ScoreBoard {
   }
 }
 
-// What the end screen says about the saved score
+// it will show at the end screen says about the saved score
 const SAVE_MESSAGES = {
   guest: "Log in to save your score in the rankings.",
   saved: "New personal best! Saved to the rankings.",
   kept: "Your best score is higher. Nothing was changed.",
 };
 
-// GameScene tate is menu, playing, between (the banner between two levels) or end.
+// runs  the game loop and switch between game states
 export class GameScene {
-  // canvas is the game canvas, `assets` holds the loaded pictures and sounds
+  // canvas is the game canvas assets holds the loaded pictures and sounds
   constructor(canvas, assets) {
     this.context = canvas.getContext("2d");
     this.assets = assets;
@@ -97,12 +97,12 @@ export class GameScene {
     this.savedScore = 0;
     this.hasNewBest = false;
 
-    // The menu is shown by game.js it sets this function
+    // the menu is shown by game.js it sets this function
     this.onExit = () => {};
     requestAnimationFrame((stamp) => this.loop(stamp));
   }
 
-  // Starts level number (1 to 3) carried is what the player brings from the last level.
+  // Starts level number 1 to 3 carried is what the player brings from the last level.
   startLevel(number, carried = FRESH_START) {
     if (carried === FRESH_START) {
       this.savedScore = 0;
@@ -115,15 +115,16 @@ export class GameScene {
     this.draw();
   }
 
-  // Goes back to the menu
+  // it goes back to the menu
   quit() {
     this.sounds.stopMusic();
     this.state = "menu";
     this.onExit();
   }
 
-  // Called by the browser for every frame The clock only moves in small steps, even after a pause.
+// update and redraw the game every frame
   loop(stamp) {
+    // change milliseconds into seconds and limit large time jumps.
     const seconds = this.lastFrame === 0 ? 0 : Math.min((stamp - this.lastFrame) / 1000, 0.05);
     this.lastFrame = stamp;
     this.time += seconds * 1000;
@@ -133,7 +134,7 @@ export class GameScene {
     requestAnimationFrame((next) => this.loop(next));
   }
 
-  // Moves the game forward Escape leaves a level reaching the exit goes on; dying ends the game.
+  // checks gameplay level endings and escape
   update(seconds) {
     if (this.state === "playing") {
       this.level.update(this.time, seconds, this.keys);
@@ -152,7 +153,7 @@ export class GameScene {
     }
   }
 
-  // Shows the banner and goes on with the next level or ends the game after the last one
+  // shows the banner and goes on with the next level or ends the game after the last one
   completeLevel() {
     if (this.level.number < LEVELS.length) {
       this.state = "between";
@@ -162,14 +163,13 @@ export class GameScene {
     }
   }
 
-  // Ends the game saves the score and shows the end screen
+  // ends the game saves the score and shows the end screen
   finish(won) {
     this.state = "end";
     this.sounds.stopMusic();
     this.result = { won, save: this.saveScore() };
   }
-      // Saves the score to the rankings. ScoreBoard only replaces a lower score, so saving often is safe.
-  // Returns guest, saved or kept. Once this run has set a new best, the end screen says saved.
+ // try to save the players current score
   saveScore() {
     this.savedScore = this.level.score;
     const outcome = this.scoreBoard.save(this.level.score);
@@ -179,14 +179,14 @@ export class GameScene {
     return this.hasNewBest ? "saved" : outcome;
   }
 
-  // Saves straight away whenever the score goes up (a monster killed or a level finished)
+  // saves straight away whenever the score goes up 
   saveWhenScoreGoesUp() {
     if (this.level.score > this.savedScore) {
       this.saveScore();
     }
   }
 
-  // Draws the level with the banner or the end screen on top when they are shown
+  // it draws the level with the banner or the end screen on top when they are shown
   draw() {
     const { number, score } = this.level ?? {};
     if (this.state === "between") {
@@ -208,7 +208,7 @@ export class GameScene {
     }
   }
 
-  // Covers the screen with a colour and writes centred lines on it
+  // it covers the screen with a colour and writes centred lines on it
   drawScreen(background, lines) {
     this.context.fillStyle = background;
     this.context.fillRect(0, 0, SCREEN.width, SCREEN.height);

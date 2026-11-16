@@ -34,7 +34,7 @@
       <h1>REGISTER</h1>
       <div id="form-message" class="message" role="status"></div>
 
-      <form id="register-form" novalidate>
+      <div id="register-form">
         <div class="field">
           <label for="fullName">Name</label>
           <input type="text" id="fullName" name="fullName" autocomplete="name">
@@ -65,8 +65,8 @@
           <span class="error" id="confirmPassword-error" role="alert"></span>
         </div>
 
-        <button type="submit" class="button">JOIN</button>
-      </form>
+        <button type="button" id="register-btn" class="button">JOIN</button>
+      </div>
 
       <p>Have an account? <a href="login.html">Login</a></p>
     </section>

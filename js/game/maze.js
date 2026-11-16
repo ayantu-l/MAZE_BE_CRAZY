@@ -1,10 +1,9 @@
-// The maze of one level the walls (CollisionMap), the route finding (RouteGrid) and the Maze that joins them.
+// it draw the maze, block walls and find routes
+
 import { MAZE_GRID, NEIGHBOUR_STEPS, PLAYER, SCREEN, TILE_SIZE } from "./constants.js";
 import { distanceBetween, scaleBy } from "./engine.js";
 
-// White pixels of the map are floor, black pixels are walls.
-// mapImage has the same size as the maze picture, so the walls match the picture exactly.
-// scale is how much bigger the picture is drawn in the game.
+// uses white pixels for paths and black pixels for walls
 class CollisionMap {
 
   constructor(mapImage, scale) {
@@ -18,7 +17,7 @@ class CollisionMap {
     context.drawImage(mapImage, 0, 0);
     const { data } = context.getImageData(0, 0, this.size.width, this.size.height);
 
-// One entry per pixel true for floor Every pixel takes 4 numbers (red, green, blue, alpha) in `data`.
+// reads one entry per pixel true for floor Every pixel takes 
     this.floor = [];
     const pixelCount = this.size.width * this.size.height;
     for (let pixelIndex = 0; pixelIndex < pixelCount; pixelIndex++) {
@@ -26,13 +25,13 @@ class CollisionMap {
     }
   }
 
-  // True when the map pixel is floor (outside the map counts as wall)
+  // true when the map pixel is floor the walking path
   isFloorPixel({ column, row }) {
     const inside = column >= 0 && row >= 0 && column < this.size.width && row < this.size.height;
     return inside && this.floor[row * this.size.width + column];
   }
 
-  // True when the game position is inside a wall
+  // true when the game position is inside a wall
   isWall(position) {
     return !this.isFloorPixel({
       column: Math.floor(position.horizontal / this.scale),
@@ -40,8 +39,8 @@ class CollisionMap {
     });
   }
 
-  // True when the player body would touch a wall if his feet were at this position.
-  // The body is checked with a grid of 3 x 3 points.
+  // true when the player body would touch a wall if his feet were at this position
+  // the body is checked with a grid of 9 points
   isBlocked(feet) {
     const { halfWidth, height } = PLAYER.body;
     for (const side of [-1, 0, 1]) {
@@ -59,7 +58,7 @@ class CollisionMap {
   }
 }
 
-// RouteGrid knows which squares are floor which are safe and how far every square is from a start square.
+// routegrid knows which squares are floor which are safe and how far every square is from a start square
 class RouteGrid {
   // Builds the grids from the collision map
   constructor(collisionMap) {
@@ -67,9 +66,7 @@ class RouteGrid {
     const { cellPixels } = MAZE_GRID;
     this.columns = Math.floor(collisionMap.size.width / cellPixels);
     this.rows = Math.floor(collisionMap.size.height / cellPixels);
-
-    // One entry per square true when the square is floor (white), false when it is a wall (black).
-    // A square is floor when the pixel in its middle is floor.   
+  
     this.floor = [];
     for (let squareIndex = 0; squareIndex < this.columns * this.rows; squareIndex++) {
       const centrePixel = {
@@ -78,42 +75,42 @@ class RouteGrid {
       };
       this.floor.push(collisionMap.isFloorPixel(centrePixel));
     }
-  // Used by the path search how many steps each square is from the start, and the list of squares to visit
+  // it uses by the path search how many steps each square is from the start
     this.steps = new Int32Array(this.columns * this.rows);
     this.queue = new Int32Array(this.columns * this.rows);
   }
 
-  // The square that lies `step` away from `square`
+  // find a nearby grid square
   neighbour(square, step) {
     return { column: square.column + step.columns, row: square.row + step.rows };
   }
 
-  // Converts between a square and its number in the lists
+    // turn a row and column into an array index
   indexOf(square) {
     return square.row * this.columns + square.column;
   }
 
-  // The square that has this number in the lists
+   // turn an array index back into a grid square
   squareOf(index) {
     return { column: index % this.columns, row: Math.floor(index / this.columns) };
   }
 
-  // True when the square lies inside the maze
+  // it turn an array index back into a grid square
   contains(square) {
     return square.column >= 0 && square.row >= 0 && square.column < this.columns && square.row < this.rows;
   }
 
-  // True when the square is floor
+  // it true when the square is floor
   isFloor(square) {
     return this.contains(square) && this.floor[this.indexOf(square)];
   }
 
-  // The square that holds a game position
+  // the square that holds a game position
   squareAt(position) {
     return { column: Math.floor(position.horizontal / this.tileSize), row: Math.floor(position.vertical / this.tileSize) };
   }
 
-  // The game position in the middle of a square
+ // find the middle of a grid square
   centreOf(square) {
     return { horizontal: (square.column + 0.5) * this.tileSize, vertical: (square.row + 0.5) * this.tileSize };
   }
@@ -124,8 +121,8 @@ class RouteGrid {
     return next.find((candidate) => this.isFloor(candidate)) ?? square;
   }
 
-  // Counts how many steps every floor square is away from start (breadth first search).
-  // Squares that cannot be reached get -1.
+  // it counts how many steps every floor square is away from start breadth first search
+  // the squares that cannot be reached get -1
   measureFrom(start) {
     this.steps.fill(-1);
     let head = 0;
@@ -146,7 +143,7 @@ class RouteGrid {
     }
   }
 
-  // Steps from the last start square to square (-1 when it cannot be reached)
+  // steps from the last start square to square -1 when it cannot be reached
   stepsTo(square) {
     return this.contains(square) ? this.steps[this.indexOf(square)] : -1;
   }
@@ -166,9 +163,9 @@ class RouteGrid {
   }
 }
 
-// Maze puts the picture the collision map and the route grid together.
+// keeps the maze image, walls and routes together
 export class Maze {
-  // image is the maze picture mapImage the black and white map, level an entry of LEVELS
+  // image is the maze picture mapImage the black and white map level an entry of LEVELS
   constructor(image, mapImage, level) {
     this.image = image;
     this.size = { width: image.width * MAZE_GRID.scale, height: image.height * MAZE_GRID.scale };
@@ -178,14 +175,14 @@ export class Maze {
     this.routes = new RouteGrid(this.collision);
   }
 
-  // Chooses count places for monsters. They must be reachable, far from the entrance and the exit and as far away from each other as possible.
+ // chooses monster starting points away from the exit
   pickSpawns(count) {
     this.routes.measureFrom(this.routes.floorSquareAt(this.entrance));
     const candidates = this.routes.sampleFloorSquares().filter(({ square, position }) =>
       this.routes.stepsTo(square) > 90 && distanceBetween(position, this.exit) > 250
     );
 
-    // Every new monster goes to the candidate whose nearest monster is the furthest away
+    // Every new monster goes to the player whose nearest monster is the furthest away
     const chosen = [this.entrance];
     return Array.from({ length: count }, () => {
       const best = candidates.reduce((winner, candidate) => {
@@ -197,7 +194,7 @@ export class Maze {
     });
   }
 
-  // Draws the part of the picture that the camera sees camera is the top left corner in game pixels.
+  // it draws the part of the picture that the camera sees camera is the top left corner in game pixels.
   draw(context, camera) {
     const { scale } = MAZE_GRID;
     context.drawImage(

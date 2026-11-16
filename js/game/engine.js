@@ -1,17 +1,14 @@
-// The engine small helpers and the building blocks the game is made of.
-//   helpers distance, moving and scaling positions (a position is horizontal, vertical )
-//   Animator and Entity an animated sprite at a position (the base of the player and the monsters)
-//   drawText, Darkness, Echo, Hud everything that is drawn over the maze
+// it shared tools for positions, sprites and visual effects 
 import { COLOURS, DARKNESS, ECHO, GUN, PLAYER, SCREEN, TIMING } from "./constants.js";
 
-// How far apart two positions are
+// finds the distance between two positions
 export function distanceBetween(first, second) {
   const across = second.horizontal - first.horizontal;
   const down = second.vertical - first.vertical;
   return Math.hypot(across, down);
 }
 
-// A new position, moved by an offset
+// a new position and all moved by an offset
 export function moveBy(position, offset) {
   return {
     horizontal: position.horizontal + offset.horizontal,
@@ -19,7 +16,7 @@ export function moveBy(position, offset) {
   };
 }
 
-// A new position, multiplied by a number
+// it multiply the horizontal and vertical values by a number
 export function scaleBy(position, factor) {
   return {
     horizontal: position.horizontal * factor,
@@ -27,12 +24,12 @@ export function scaleBy(position, factor) {
   };
 }
 
-// Keeps a number between a lowest and a highest value
+// it's keeps a number between a lowest and a highest value
 export function clamp(value, lowest, highest) {
   return Math.max(lowest, Math.min(value, highest));
 }
 
-// The main direction of an offset left, right, up or down
+// it finds which direction an object is mostly moving
 export function directionName(offset) {
   if (Math.abs(offset.horizontal) >= Math.abs(offset.vertical)) {
     return offset.horizontal < 0 ? "left" : "right";
@@ -40,31 +37,33 @@ export function directionName(offset) {
   return offset.vertical < 0 ? "up" : "down";
 }
 
-// Animator plays one animation at a time and tells which picture of the sheet to show.
+
+// choose which picture in a sprite sheet to show
 class Animator {
-  // spec is an entry of SPRITES, firstName is the animation to start with
+  // spec is an entry of sprites firstName is the animation to start with
   constructor(spec, firstName) {
     this.spec = spec;
     this.name = firstName;
     this.seconds = 0;
   }
 
-  // Switches to another animation (nothing happens if it is already playing)
+  // Switches to another animation nothing will happens if it is already playing
   play(name) {
     if (name !== this.name) {
       this.name = name;
       this.seconds = 0;
     }
   }
-
-  // Moves the animation forward in time
+// adds the time passed to the animation timer
   tick(seconds) {
     this.seconds += seconds;
   }
 
-  // The number of the picture to show now (the sheet is counted row by row)
+
+  // find the current frame in the sprite sheet
   get frame() {
     const animation = this.spec.animations[this.name];
+        // time x frames per second gives the animation frame
     let step = Math.floor(this.seconds * animation.fps);
     if (animation.loop) {
       step = step % animation.frames;
@@ -75,27 +74,25 @@ class Animator {
   }
 }
 
-// Entity the base of the player and the monsters. It has a position (the feet) and an animated sprite.
+// it stores shared drawing and animation code for characters.
 export class Entity {
-  //image is the sprite sheet, spec an entry of SPRITES, position where the feet are
   constructor(image, spec, position, firstAnimation) {
     this.image = image;
     this.spec = spec;
     this.animator = new Animator(spec, firstAnimation);
     this.position = { horizontal: position.horizontal, vertical: position.vertical };
   }
-
-  // How much bigger than the sheet the sprite is drawn (the player and the monsters change this)
+  // return the character display scale.
   get size() {
     return 1;
   }
 
-  // Where the feet are on the screen camera is the top left corner of what the screen shows.
+ // it will convert a game position into a screen position.
   screenPosition(camera) {
     return moveBy(this.position, scaleBy(camera, -1));
   }
 
-  // Draws the current picture so that the feet stand on the screen position
+  // it will draw the current picture so that the feet stand on the screen position
   draw(context, camera) {
     const frameSize = this.spec.frameSize;
     const frame = this.animator.frame;
@@ -115,7 +112,7 @@ export class Entity {
   }
 }
 
-// Draws text with a black outline so that it can be read on every maze
+// it draws text with a black outline so that it can be read on every maze
 export function drawText(context, text, position, size, colour, align) {
   context.font = "bold " + size + "px " + SCREEN.font;
   context.textAlign = align;
@@ -126,20 +123,19 @@ export function drawText(context, text, position, size, colour, align) {
   context.fillText(text, position.horizontal, position.vertical);
 }
 
-// Darkness a black cover with a clear hole around the player. The light flickers a little.
-// light makes the hole bigger (1) or smaller (less than 1)
+// it make the maze dark except near the player
 export class Darkness {
   constructor(light) {
     this.light = light;
   }
 
-  // Draws the cover with the hole at `centre` on the screen
+  // it draws the cover with the hole at centre on the screen
   draw(context, centre, time) {
     const flicker = 1 + Math.sin(time / 90) * 0.015 + Math.sin(time / 37) * 0.01;
     const outer = DARKNESS.outerRadius * this.light * flicker;
     const inner = DARKNESS.innerRadius * this.light * flicker;
 
-    // Clear in the middle then darker and darker towards the edge
+    // clear in the middle then darker and darker towards the edge
     const gradient = context.createRadialGradient(centre.horizontal, centre.vertical, 0, centre.horizontal, centre.vertical, outer);
     gradient.addColorStop(0, COLOURS.darknessClear);
     gradient.addColorStop(inner / outer, COLOURS.darknessClear);
@@ -150,7 +146,7 @@ export class Darkness {
   }
 }
 
-// Echo the timing of the ability and the map of the whole maze.
+// echo the timing of the ability and the map of the whole maze
 export class Echo {
   // Starts ready to use
   constructor() {
@@ -163,7 +159,7 @@ export class Echo {
     return time < this.endsAt;
   }
 
-  // Tries to use the echo Returns true when it started.
+  // tries to use the echo returns true when it started
   use(time) {
     if (time < this.readyAt) {
       return false;
@@ -173,7 +169,7 @@ export class Echo {
     return true;
   }
 
-  // Text for the HUD ready, running or recharging
+  // Text for the hud ready running or recharging
   statusText(time) {
     if (this.isActive(time)) {
       return "ECHO!";
@@ -184,7 +180,7 @@ export class Echo {
     return "ECHO " + Math.ceil((this.readyAt - time) / 1000) + "s";
   }
 
-  // Draws one dot on the map position is a place in the maze, the map is shown at corner.
+  // draws one dot on the map position is a place in the maze,the map is shown at corner
   drawDot(context, position, colour, radius, maze, corner, shown) {
     context.fillStyle = colour;
     context.beginPath();
@@ -196,7 +192,7 @@ export class Echo {
     context.fill();
   }
 
-  // Draws the whole maze, shrunk to fit the screen, with dots for the exit, the monsters and the player
+  // it draws the whole maze shrunk to fit the screen with dots for the exit the monsters and the player
   draw(context, level) {
     const maze = level.maze;
     const fit = Math.min(SCREEN.width / maze.image.width, SCREEN.height / maze.image.height) * 0.94;
@@ -217,7 +213,7 @@ export class Echo {
   }
 }
 
-// Hud the health bar, the gun heat bar, texts and short notices, fixed to the screen.
+// draw the health, weapon heat, score and messages
 export class Hud {
   // Starts without a notice
   constructor() {
@@ -226,14 +222,14 @@ export class Hud {
     this.noticeUntil = 0;
   }
 
-  // Shows a short message near the top of the screen that fades away
+  // shows a short message near the top of the screen that fades away
   flash(message, colour, time) {
     this.noticeText = message;
     this.noticeColour = colour;
     this.noticeUntil = time + TIMING.noticeMs;
   }
 
-  // Draws a bar back is the empty bar and fill covers fraction (0 to 1) of it
+// draw a bar using the current value.
   drawBar(context, area, fraction, fill, back) {
     context.fillStyle = back;
     context.fillRect(area.left, area.top, area.width, area.height);
@@ -241,7 +237,7 @@ export class Hud {
     context.fillRect(area.left, area.top, area.width * Math.min(1, fraction), area.height);
   }
 
-  // Draws everything from the state of the level
+  // it draws everything from the state of the level objects on the cnavas
   draw(context, level, time) {
     const player = level.player;
     const gun = player.gun;
@@ -254,7 +250,7 @@ export class Hud {
     const heatColour = jammed ? COLOURS.jammed : COLOURS.heat;
     this.drawBar(context, { left: 70, top: 38, width: 176, height: 12 }, gun.heat / GUN.maxHeat, heatColour, COLOURS.heatBack);
 
-    // The texts on the left
+    // the texts on the left
     drawText(context, "HP", { horizontal: 16, vertical: 26 }, 14, COLOURS.text, "left");
     if (jammed) {
       drawText(context, "JAM " + Math.ceil(gun.jamSecondsLeft(time)), { horizontal: 16, vertical: 50 }, 14, COLOURS.warning, "left");

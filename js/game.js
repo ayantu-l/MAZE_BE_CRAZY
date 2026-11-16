@@ -1,8 +1,8 @@
-// Game page loads the game files, then lets the player start a level with the level buttons.
+// connect the game menu to the canvas game
 import { Assets } from "./game/assets.js";
 import { GameScene } from "./game/gamescene.js";
 
-// gamePage connects the level menu and the canvas to the game
+// gamepage connects the level menu and the canvas to the game
 class GamePage {
   constructor() {
     this.menu = document.getElementById("level-selection");

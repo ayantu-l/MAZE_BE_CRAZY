@@ -1,11 +1,12 @@
-// Settings shared by the whole game. Everything is grouped in objects so it can be changed in one place.
-// A position is always an object like horizontal, vertical , measured in game pixels.
+// this keeps the game settings together in one file 
+// the canvas size and game font
+// scale the maze image and divide it into smaller squares
 
-// The maze pictures are drawn scale times bigger than the files. For route finding the maze is cut into squares of cellPixels picture pixels
 export const SCREEN = { width: 1280, height: 720, font: '"Courier New", Courier, monospace' };
 export const MAZE_GRID = { scale: 1.5, cellPixels: 4 };
 export const TILE_SIZE = MAZE_GRID.cellPixels * MAZE_GRID.scale;
 
+// on this is -1, 0 and 1 to show which way objects move should move
 export const DIRECTIONS = {
   left: { horizontal: -1, vertical: 0 },
   right: { horizontal: 1, vertical: 0 },
@@ -13,14 +14,13 @@ export const DIRECTIONS = {
   down: { horizontal: 0, vertical: 1 },
 };
 
-// The four squares next to a grid square as a step in columns and rows
+// the 4 square next to a grid square as a step in columns and rows
 export const NEIGHBOUR_STEPS = Object.values(DIRECTIONS).map(({ horizontal, vertical }) => ({
   columns: horizontal,
   rows: vertical,
 }));
 
-// Sprite sheets the file, the size of one picture, the number of columns, where the feet are inside one
-// picture (0 to 1) and every animation (row of the sheet, number of pictures, speed and whether it repeats).
+// sprite sheet of the sizes, rows, frames and animation speeds
 export const SPRITES = {
   player: {
     file: "../images/player.png",
@@ -66,8 +66,8 @@ export const SPRITES = {
   },
 };
 
-// The player body is the small box at his feet that touches the walls. muzzle is where a bullet leaves
-// the gun for every direction, measured from his feet in sprite pixels.
+
+// the player size, health, collision body and bullet starting point
 export const PLAYER = {
   size: 1.1,
   health: 100,
@@ -80,7 +80,7 @@ export const PLAYER = {
   },
 };
 
-// Weapon Overheat ammo is unlimited, but every shot heats the gun. A full gun jams for jamMs.
+// the bullet speed, shooting delay, heat and jam settings
 export const GUN = {
   damage: 1,
   delayMs: 230,
@@ -94,10 +94,10 @@ export const GUN = {
   jamMs: 5000,
 };
 
-// Echo show the whole maze, but every monster learns where the player is.
+// it's how longs echo lasts, recharges and alerts monsters
 export const ECHO = { durationMs: 3000, cooldownMs: 15000, alertMs: 8000 };
 
-// The monsters The hit circle is in sprite pixels and is multiplied by the size.
+// the monsters will hit circle is in sprite pixels and is multiplied by the size
 export const MONSTER = {
   size: 0.95,
   seeRange: 600,
@@ -110,10 +110,10 @@ export const MONSTER = {
   fadeAfterMs: 1200,
 };
 
+// its shows points for monsters and completing levels
 export const SCORE = { kill: 100, levelBonus: 200, timeBonus: 150 };
 
-// The levels (to add the next one, copy the object below and change the values
-// Positions are in pixels of the maze picture: the entrance is the gap in the left wall, the exit the gap in the right wall. Every level has more and tougher monsters and less light.
+// it's three levels with their images, speed and monster strength each level are different
 export const LEVELS = [
   {
     name: "Stone Dungeon",
@@ -154,10 +154,10 @@ export const LEVELS = [
 ];
   
 
-// The exit of a maze. The level is finished when the player comes closer than `reach`.
+// the exit of a maze levels are finished when the player comes closer than reach the exit
 export const EXIT = { reach: 60, scale: 1.3, lift: 20, glowRadius: 120 };
 
-// Short times in milliseconds
+// the time for the animations and messages times in milliseconds
 export const TIMING = {
   hurtMs: 250,
   shootMs: 250,
@@ -169,22 +169,21 @@ export const TIMING = {
   routeRefreshMs: 150,
 };
 
-// The size of the light around the player. Both circles are multiplied by the light of the level.
+// the size of the light around the player
 export const DARKNESS = { outerRadius: 520, innerRadius: 150, lift: 40 };
 
-// The volume of every sound file in the sounds folder (0 to 1). "explore" is the music loop.
+// the volume of every sound file in the sounds folder 0 to 1
 export const SOUND_VOLUMES = {
   shoot: 0.35, hit: 0.5, hurt: 0.6, jam: 0.7, echo: 0.7, win: 0.8, die: 0.8, growl: 0.4, explore: 0.5,
 };
 
-// Pictures that are not sprite sheets or mazes
+// pictures that are not sprite sheets 
 export const PICTURES = { bullet: "../images/bullet.png", exit: "../images/exit.png" };
 
-// Colours used for texts, bars and the darkness. They are written in css/style.css (the --game-... variables)
-// and read from there, so all colours of the website and the game are in one place.
+// colors used for texts, bars and the darkness from css
 const cssStyle = getComputedStyle(document.documentElement);
 
-// Reads one colour variable from the stylesheet
+// it reads one colour variable from the stylesheet
 function cssColour(name) {
   return cssStyle.getPropertyValue(name).trim();
 }
@@ -213,5 +212,5 @@ export const COLOURS = {
   exitGlowClear: cssColour("--game-exit-glow-clear"),
 };
 
-// What the player takes from one level to the next
+// what the player it takes from one level to the next
 export const FRESH_START = { score: 0, health: PLAYER.health };

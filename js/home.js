@@ -1,9 +1,10 @@
-// Home page plays the intro splash once per visit, and a click or key press skips it.
+// it will show the home intro only once per tab visit
 const INTRO_KEY = "mbc_intro_shown";
 const INTRO_LENGTH = 3400; 
  
 const intro = document.getElementById("intro");
 
+// fades out the intro and show the Home page
 function closeIntro() {
   clearTimeout(introTimer);
   intro.classList.add("leaving");
@@ -27,7 +28,7 @@ let introTimer = null;
     intro.addEventListener("click", closeIntro);
     document.addEventListener("keydown", closeIntro, { once: true });
  
-  // When the fade will out has finished remove the intro and let the page scroll again
+  // when the fade will out has finished remove the intro and let the page scroll again
     intro.addEventListener("transitionend", (event) => {
       if (event.target === intro && intro.classList.contains("leaving")) {
         intro.remove();

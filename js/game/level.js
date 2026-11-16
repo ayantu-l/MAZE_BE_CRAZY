@@ -1,16 +1,14 @@
-// Level one maze with its player, monsters echo, darkness and HUD. It runs the rules of the game.
+// the level one maze with its player, monsters echo, darkness and hud it runs the rules of the game.
 import { COLOURS, DARKNESS, ECHO, EXIT, GUN, LEVELS, SCORE, SCREEN, TIMING } from "./constants.js";
 import { Darkness, Echo, Hud, clamp, distanceBetween, moveBy, scaleBy } from "./engine.js";
 import { Enemy } from "./enemy.js";
 import { Maze } from "./maze.js";
 import { Player } from "./player.js";
 
-// Used instead of the keyboard when the player must not react to keys (he is dying)
+// used instead of the keyboard when the player must not react to keys 
 const NO_KEYS = { isDown: () => false, wasPressed: () => false };
 
-// Level one maze with its player, monsters and rules.
-// status is playing, dying (the death animation), complete (reached the exit) or dead.
- // number is the level number, carried is what the player brings from the last level (score, health )
+// created and update everything in the current level
 export class Level {
   constructor(number, assets, sounds, carried, time) {
     this.number = number;
@@ -45,12 +43,12 @@ export class Level {
     this.hud.flash("LEVEL " + number + ": " + this.definition.name.toUpperCase(), COLOURS.danger, time);
   }
 
-  // What the player takes to the next level
+   // keep the score and health for the next level
   get carried() {
     return { score: this.score, health: this.player.health };
   }
 
-  // The top left corner of what the screen shows the player is in the middle but never beyond the maze
+  // the top left corner of what the screen shows the player is in the middle but never beyond the maze
   get camera() {
     const { position } = this.player;
     return {
@@ -59,7 +57,7 @@ export class Level {
     };
   }
 
-  // Moves everything forward by seconds time is the game clock in milliseconds.
+  // it moves everything forward by seconds time is the game clock in milliseconds.
   update(time, seconds, keys) {
     const input = this.status === "dying" ? NO_KEYS : keys;
     this.handleGun(this.player.update(time, seconds, input, this.maze.collision), time);
@@ -83,7 +81,7 @@ export class Level {
     }
   }
 
-  // Plays the sound that belongs to what the gun just did
+  // plays the sound tfor shooting and jam
   handleGun(outcome, time) {
     if (outcome === "wait") {
       return;
@@ -104,8 +102,8 @@ export class Level {
     });
   }
 
-  // Counts the steps from the players square to every square so monsters can find the way to him.
-  // It is only redone when the player moves to another square and at most every 150 milliseconds.
+
+  // it will update the paths monsters use to find the player
   refreshRoutes(time) {
     const { routes } = this.maze;
     const square = routes.floorSquareAt(this.player.position);
@@ -119,7 +117,7 @@ export class Level {
     this.nextRouteUpdateAt = time + TIMING.routeRefreshMs;
   }
 
-  // A hunting monster growls now and then
+ // play monster growls while they are hunting
   growlWhenHunted(time) {
     if (time >= this.nextGrowlAt && this.monsters.some((monster) => monster.isHunting)) {
       this.sounds.play("growl");
@@ -127,7 +125,7 @@ export class Level {
     }
   }
 
-  // A monster bites the player When the health is gone the death animation plays and the level ends.
+  // reduce health when a monster bites the player
   hurtPlayer(damage, time) {
     this.player.health = Math.max(0, this.player.health - damage);
     this.player.markHurt(time);
@@ -140,7 +138,7 @@ export class Level {
     }
   }
 
-  // Checks every bullet against the monsters. A hit hurts a monster and a killed monster gives points.
+ // check bullets against monsters and award points
   checkBulletHits(time) {
     this.player.bullets = this.player.bullets.filter((bullet) => {
       const target = this.monsters.find((monster) => !monster.isDying && monster.isHitBy(bullet.position));
@@ -156,7 +154,7 @@ export class Level {
     });
   }
 
-  // Completes the level when the player reaches the exit faster players get a bigger time bonus
+  // when completes the level when the player reaches the exit faster players get a bigger time bonus
   checkExit(time) {
     if (this.status !== "playing" || distanceBetween(this.player.position, this.maze.exit) > EXIT.reach) {
       return;
@@ -167,7 +165,7 @@ export class Level {
     this.status = "complete";
   }
 
-  // Draws the maze, the actors, the darkness, the HUD and (while it lasts) the echo
+  // it draws the maze, the actors and the darkness, 
   draw(context, time) {
     const camera = this.camera;
     context.save();
@@ -176,7 +174,7 @@ export class Level {
     this.maze.draw(context, camera);
     this.drawExit(context, camera);
    
-    // Monsters and the player are drawn from the back to the front so the lower one is in front
+    // monsters and the player are drawn from the back to the front so the lower one is in front
    const actors = [...this.monsters, this.player];
     actors.sort((first, second) => first.position.vertical - second.position.vertical);
     for (const actor of actors) {
@@ -195,12 +193,12 @@ export class Level {
     }
   }
 
-  // The place on the screen where the exit picture is drawn
+  // the place on the screen where the exit picture is drawn
   exitOnScreen(camera) {
     return moveBy(moveBy(this.maze.exit, scaleBy(camera, -1)), { horizontal: 0, vertical: -EXIT.lift });
   }
 
-  // Draws the exit picture
+  // draws the exit picture
   drawExit(context, camera) {
     const image = this.images.exit;
     const size = { width: image.width * EXIT.scale, height: image.height * EXIT.scale };
@@ -208,7 +206,7 @@ export class Level {
     context.drawImage(image, centre.horizontal - size.width / 2, centre.vertical - size.height / 2, size.width, size.height);
   }
 
-  // A soft green glow over the darkness so that the exit can be seen from far away
+  // asoft green glow over the darkness so that the exit can be seen from far away
   drawExitGlow(context, camera) {
     const centre = this.exitOnScreen(camera);
     const radius = EXIT.glowRadius;

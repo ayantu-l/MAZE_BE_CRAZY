@@ -1,14 +1,14 @@
-// Assets loads every picture and sound once; the SoundManager plays them.
-// Assets will keeps the loaded pictures in this.images and the sounds in this.sounds.
+// it loads the game pictures and play sounds from constats 
 import { LEVELS, PICTURES, SOUND_VOLUMES, SPRITES } from "./constants.js";
 
+// load all the images and sounds before the game start
 export class Assets {
   constructor() {
     this.images = {};
     this.sounds = {};
   }
 
-  // Loads one picture and stores it under name fails with a clear message when the file is missing
+  // loads one images and stores it under name  and fails with a clear message when the file is not thier
   loadImage(name, path) {
     return new Promise((resolve, reject) => {
       const image = new Image();
@@ -21,7 +21,7 @@ export class Assets {
     });
   }
 
-  // Loads all sprite sheets, mazes and maps and creates the sounds
+  // loads all sprite sheets mazes and maps and also creates the sounds
   async load() {
     const files = [
       ["player", SPRITES.player.file],
@@ -45,14 +45,14 @@ export class Assets {
   }
 }
 
-// SoundManager plays the sounds that Assets loaded and follows the sound button.
+//  it plays the sounds that assets loaded and controles backgrond music
 export class SoundManager {
   constructor(sounds) {
     this.sounds = sounds;
     this.isMusicOn = false;
   }
 
-    // Plays a sound effect once, unless the sound is switched off
+    // plays a one song only if the sound is there 
   play(name) {
     if (isMuted()) {
       return;
@@ -62,7 +62,7 @@ export class SoundManager {
     copy.play().catch(() => {});
   }
 
-  // Starts the music loop of the level
+  // it start the music loop of the level
   startMusic() {
     this.sounds.explore.loop = true;
     this.sounds.explore.volume = SOUND_VOLUMES.explore;
@@ -70,14 +70,14 @@ export class SoundManager {
     this.followSoundButton();
   }
 
-  // Stops the music and rewinds it
+  // stops the music and resets it
   stopMusic() {
     this.isMusicOn = false;
     this.sounds.explore.pause();
     this.sounds.explore.currentTime = 0;
   }
 
-  // Pauses or resumes the music to macth the sound butto
+  // matchs the music to the sound of the button
   followSoundButton() {
     const music = this.sounds.explore;
     if (this.isMusicOn && !isMuted()) {

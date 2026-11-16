@@ -1,6 +1,7 @@
-// Registration page validates every field with JavaScript, then saves the new user as JSON.
+// registration page validates every field then saves the new user as json
 
 const form = document.getElementById("register-form");
+const registerButton = document.getElementById("register-btn");
 const message = document.getElementById("form-message");
 
 const nameInput = document.getElementById("fullName");
@@ -15,7 +16,7 @@ const phoneError = document.getElementById("phone-error");
 const passwordError = document.getElementById("password-error");
 const confirmError = document.getElementById("confirmPassword-error");
 
-// Remove every error message and red border from the form
+// remove every error message and red border from the form
 function clearErrors() {
   nameError.textContent = "";
   emailError.textContent = "";
@@ -32,18 +33,18 @@ function clearErrors() {
   showMessage(message, "", null);
 }
 
-// True when the text looks like an email address
+// true when the text looks like an email address
 function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-// Accepts only UAE mobile numbers: +971 5X XXXXXXX, 00971 5X XXXXXXX or 05X XXXXXXX (spaces and dashes allowed)
+// accepts only UAE mobile numbers that starts with+971 or 05
 function isValidPhone(value) {
   const digits = value.replace(/[\s-]/g, "");
   return /^(\+971|00971|05[024569])\d{7}$/.test(digits);
 }
 
-// True when the password has at least 8 characters, an uppercase letter, a lowercase letter and a number
+// true when the password has at least 8 characters, an uppercase letter, a lowercase letter and a number
 function isValidPassword(value) {
   return value.length >= 8 &&
     /[A-Z]/.test(value) &&
@@ -51,7 +52,7 @@ function isValidPassword(value) {
     /[0-9]/.test(value);
 }
 
-// Checks every field and shows a message under each one that is wrong returns true when all are valid
+// it checks every field and shows a message under each one that is wrong returns true when all are valid
 function validate() {
   let valid = true;
 
@@ -110,8 +111,8 @@ function validate() {
 
   return valid;
 }
-
-form.addEventListener("submit", (event) => {
+// runs these checks when join is clicked
+registerButton.addEventListener("click", (event) => {
   event.preventDefault();
   clearErrors();
 
@@ -126,6 +127,7 @@ form.addEventListener("submit", (event) => {
 
   const users = getUsers();
 
+   // it doesn't allow two accounts to use the same email
   if (users.some(user => user.email === email)) {
     emailError.textContent = "An account with that email already exists.";
     emailInput.classList.add("invalid");
@@ -147,4 +149,14 @@ form.addEventListener("submit", (event) => {
   setTimeout(() => {
     window.location.href = "login.html";
   }, 1200);
+});
+
+registerButton.addEventListener("click", handleRegister);
+
+// Pressing Enter in an input also runs the same checks.
+form.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    handleRegister();
+  }
 });
